@@ -88,13 +88,13 @@ Plotting can help catch these spikes.
 This is a **good approach** for many machine learning algorithms and approaches,
 but it must be used in moderation because adding too many could result in overfitting.
 
-## Akaiki
+## Akaike
 
 Tries to do 2 things
 
 1. Improve the accuracy of your fit.
 1. Reduce the complexity of the model.
 
-These 2 objectives often disagree, so it's beneficial to dive into the trade-offs, Akaiki
+These 2 objectives often disagree, so it's beneficial to dive into the trade-offs, Akaike
 has one way of balancing these trade-offs, but there's other approaches also that may
 have greater benefits depending on the circumstances.
