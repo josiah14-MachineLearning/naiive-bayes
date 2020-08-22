@@ -17,6 +17,7 @@ dependencies:
   - toolz==0.10.0
   - jupyterlab_pygments==0.1.1
   - jupyterthemes
+  - jupyter_console==6.1.0
   - pandas==1.1.0
   - matplotlib==3.3.0
   - seaborn==0.10.1
