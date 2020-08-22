@@ -98,3 +98,9 @@ Tries to do 2 things
 These 2 objectives often disagree, so it's beneficial to dive into the trade-offs, Akaike
 has one way of balancing these trade-offs, but there's other approaches also that may
 have greater benefits depending on the circumstances.
+
+# Tangent - Point of wisdom
+
+Learning about ML algos for making predictions/classifications.  You can toy with
+different ML algos and approaches as much as you want, but what will have the largest
+effect is finding more data that can paint a more complete picture of the story.
