@@ -18,6 +18,9 @@
 
 (defn describe-column [df
                        column-name]
+  """
+  Run the `describe` function on a column of the provided dataframe.
+  """
   (.describe (.get df column-name)))
 
 ;; Column-level Metrics
@@ -42,36 +45,73 @@
 (print "Here's some metrics on the raw Age")
 (print (describe-column pima-df "Age"))
 
+(defn filter-low-values [df column-name lower-limit]
+  #s((. df loc)
+     (< (.get df column-name) lower-limit)))
+
+(setv pima-no-glucose-df
+      (.sort_values (filter-low-values pima-df "Glucose" 30.0)
+                    :by "Glucose"
+                    :ascending False))
+(print pima-no-glucose-df)
+(print "Percentage of Glucose values that were 0")
 (print
-  #s((. pima-df loc) (< (.get pima-df "Glucose") 30.0)))
+  (/ (len (. pima-no-glucose-df index))
+     (/ total-number-of-records 100)))
+
+(setv pima-no-bp-df
+      (.sort_values (filter-low-values pima-df "DiastolicBloodPressure" 10.0)
+                    :by "DiastolicBloodPressure"
+                    :ascending False))
+(print pima-no-bp-df)
+(print "Percentage of DiastolicBloodPressure values that were 0")
 (print
-  #s((. pima-df loc) (< (.get pima-df "DiastolicBloodPressure") 20.0)))
+  (/ (len (. pima-no-bp-df index))
+     (/ total-number-of-records 100)))
+
 (print
-  (.sort_values
-    #s((. pima-df loc) (< (.get pima-df "SkinThickness") 5.0))
-    :by "SkinThickness"
-    :ascending False))
+  (.sort_values #s((. pima-df loc)
+                   (< (.get pima-df "SkinThickness") 5.0))
+                :by "SkinThickness"
+                :ascending False))
 (print "Percentage of SkinThickness values that were 0")
 (print
-  (/
-    (len
-      (.
-        #s((. pima-df loc) (< (.get pima-df "SkinThickness") 5.0))
-        index))
-    (/ total-number-of-records 100)))
-(print
-  (.sort_values
-    #s((. pima-df loc) (< (.get pima-df "Insulin") 10.0))
-    :by "Insulin"
-    :ascending False))
+  (/ (len (. #s((. pima-df loc)
+                (< (.get pima-df "SkinThickness") 5.0))
+             index))
+     (/ total-number-of-records 100)))
+
+(print (.sort_values #s((. pima-df loc)
+                        (< (.get pima-df "Insulin") 10.0))
+                     :by "Insulin"
+                     :ascending False))
 (print "Percentage of Insulin values that were 0")
+(print (/ (len (. #s((. pima-df loc)
+                     (< (.get pima-df "Insulin") 10.0))
+                  index))
+          (/ total-number-of-records 100)))
+
 (print
-  (/
-    (len
-      (.
-        #s((. pima-df loc) (< (.get pima-df "Insulin") 10.0))
-        index))
-    (/ total-number-of-records 100)))
+  (.sort_values #s((. pima-df loc)
+                   (< (.get pima-df "BMI") 5.0))
+                :by "BMI"
+                :ascending False))
+(print "Percentage of BMI values that were 0")
+(print (/ (len (. #s((. pima-df loc)
+                     (< (.get pima-df "BMI") 10.0))
+                  index))
+          (/ total-number-of-records 100)))
+
+(print
+  (.sort_values #s((. pima-df loc)
+                   (< (.get pima-df "DiabetesPedigreeFunction") 5.0))
+                :by "DiabetesPedigreeFunction"
+                :ascending False))
+(print "Percentage of DiabetesPedigreeFunction values that were 0")
+(print (/ (len (. #s((. pima-df loc)
+                     (< (.get pima-df "DiabetesPedigreeFunction") 0.01))
+                  index))
+          (/ total-number-of-records 100)))
 
 ;; If using median to replace 0's which represent NULLs, you want to use the
 ;; median of the training set, not the test set, and also be sure to exclude
