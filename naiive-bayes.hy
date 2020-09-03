@@ -69,49 +69,51 @@
   (/ (len (. pima-no-bp-df index))
      (/ total-number-of-records 100)))
 
-(print
-  (.sort_values #s((. pima-df loc)
-                   (< (.get pima-df "SkinThickness") 5.0))
-                :by "SkinThickness"
-                :ascending False))
+(setv pima-no-skin-thickness-df
+      (.sort_values (filter-low-values pima-df "SkinThickness" 5.0)
+                    :by "SkinThickness"
+                    :ascending False))
+(print pima-no-skin-thickness-df)
 (print "Percentage of SkinThickness values that were 0")
 (print
-  (/ (len (. #s((. pima-df loc)
-                (< (.get pima-df "SkinThickness") 5.0))
-             index))
+  (/ (len (. pima-no-skin-thickness-df index))
      (/ total-number-of-records 100)))
 
-(print (.sort_values #s((. pima-df loc)
-                        (< (.get pima-df "Insulin") 10.0))
-                     :by "Insulin"
-                     :ascending False))
+(setv pima-no-insulin-df
+      (.sort_values (filter-low-values pima-df "Insulin" 10.0)
+                    :by "Insulin"
+                    :ascending False))
+(print pima-no-insulin-df)
 (print "Percentage of Insulin values that were 0")
-(print (/ (len (. #s((. pima-df loc)
-                     (< (.get pima-df "Insulin") 10.0))
-                  index))
+(print (/ (len (. pima-no-insulin-df index))
           (/ total-number-of-records 100)))
 
-(print
-  (.sort_values #s((. pima-df loc)
-                   (< (.get pima-df "BMI") 5.0))
-                :by "BMI"
-                :ascending False))
+(setv pima-no-bmi-df
+      (.sort_values (filter-low-values pima-df "BMI" 5.0)
+                    :by "BMI"
+                    :ascending False))
+(print pima-no-bmi-df)
 (print "Percentage of BMI values that were 0")
-(print (/ (len (. #s((. pima-df loc)
-                     (< (.get pima-df "BMI") 10.0))
-                  index))
+(print (/ (len (. pima-no-bmi-df index))
           (/ total-number-of-records 100)))
 
-(print
-  (.sort_values #s((. pima-df loc)
-                   (< (.get pima-df "DiabetesPedigreeFunction") 5.0))
-                :by "DiabetesPedigreeFunction"
-                :ascending False))
+(setv pima-no-diabetes-pedigree-function-df
+      (.sort_values (filter-low-values pima-df "DiabetesPedigreeFunction" 0.05)
+                    :by "DiabetesPedigreeFunction"
+                    :ascending False))
+(print pima-no-diabetes-pedigree-function-df)
 (print "Percentage of DiabetesPedigreeFunction values that were 0")
-(print (/ (len (. #s((. pima-df loc)
-                     (< (.get pima-df "DiabetesPedigreeFunction") 0.01))
-                  index))
+(print (/ (len (. pima-no-diabetes-pedigree-function-df index))
           (/ total-number-of-records 100)))
+
+(setv rows-with-insulin-value
+      (. (.get (~ (.isin pima-df pima-no-insulin-df)) "Insulin") values))
+(setv pima-insulin-df
+      #s((. pima-df loc) rows-with-insulin-value))
+(print)
+(print "Insulin Column statistics: ")
+(print
+  (describe-column pima-insulin-df "Insulin"))
 
 ;; If using median to replace 0's which represent NULLs, you want to use the
 ;; median of the training set, not the test set, and also be sure to exclude
