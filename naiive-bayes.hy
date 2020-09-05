@@ -118,6 +118,9 @@
 (print (+ "Pregnancies Column statistics - raw form used because 0s are "
           "significant: "))
 (print (describe-column pima-df "Pregnancies"))
+(print (+ "Median Pregnancies: "
+          (str (.median
+                 #s((. pima-df loc) : "Pregnancies")))))
 
 (setv rows-with-glucose-value
       (. (.get (~ (.isin pima-df pima-no-glucose-df))
@@ -128,6 +131,9 @@
 (print)
 (print "Glucose Column statistics when nulls excluded: ")
 (print (describe-column pima-glucose-df "Glucose"))
+(print (+ "Median Glucose: "
+          (str (.median
+                 #s((. pima-glucose-df loc) : "Glucose")))))
 
 (setv rows-with-diastolic-bp
       (. (.get (~ (.isin pima-df pima-no-bp-df))
@@ -138,6 +144,9 @@
 (print)
 (print "DiastolicBloodPressure statistics when nulls excluded: ")
 (print (describe-column pima-bp-df "DiastolicBloodPressure"))
+(print (+ "Median DiastolicBloodPressure: "
+          (str (.median
+                 #s((. pima-bp-df loc) : "DiastolicBloodPressure")))))
 
 (setv rows-with-skin-thinkness
       (. (.get (~ (.isin pima-df pima-no-skin-thickness-df))
@@ -148,6 +157,9 @@
 (print)
 (print "SkinThickness statistics when nulls excluded: ")
 (print (describe-column pima-skin-thickness-df "SkinThickness"))
+(print (+ "Median SkinThickness: "
+          (str (.median
+                 #s((. pima-skin-thickness-df loc) : "SkinThickness")))))
 
 (setv rows-with-insulin-value
       (. (.get (~ (.isin pima-df pima-no-insulin-df))
@@ -158,6 +170,9 @@
 (print)
 (print "Insulin Column statistics when nulls excluded: ")
 (print (describe-column pima-insulin-df "Insulin"))
+(print (+ "Median Insulin: "
+          (str (.median
+                 #s((. pima-insulin-df loc) : "Insulin")))))
 
 (setv rows-with-bmi
       (. (.get (~ (.isin pima-df pima-no-bmi-df))
@@ -168,16 +183,27 @@
 (print)
 (print "BMI Column statistics when nulls excluded: ")
 (print (describe-column pima-bmi-df "BMI"))
+(print (+ "Median BMI: "
+          (str (.median
+                 #s((. pima-bmi-df loc) : "BMI")))))
 
 (print)
 (print (+ "DiabetesPedigreeFunction Column statistics - raw form used because "
           "there weren't any null/invalid values."))
 (print (describe-column pima-df "DiabetesPedigreeFunction"))
+(print (+ "Median DiabetesPedigreeFunction: "
+          (str (.median
+                 #s((. pima-df loc) : "DiabetesPedigreeFunction")))))
 
 (print)
 (print (+ "Age Column statistics - raw form used because "
           "there weren't any null/invalid values."))
 (print (describe-column pima-df "Age"))
+(print (+ "Median Age: "
+          (str (.median
+                 #s((. pima-df loc) : "Age")))))
+;; (print (.median
+;;          #s((. pima-df loc) : "Age")))
 ;; If using median to replace 0's which represent NULLs, you want to use the
 ;; median of the training set, not the test set, and also be sure to exclude
 ;; 0 values in the median/mean calculation.
