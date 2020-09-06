@@ -1,7 +1,11 @@
 (import [numpy :as np])
 (import [pandas :as pd])
+(import [matplotlib :as mpl])
+(import [matplotlib.pyplot :as plt])
 (import [helpers [*]])
 (require [helpers [*]])
+
+(.use mpl "TkAgg")
 
 (setv pima-df
       (pd.read_csv
@@ -202,6 +206,46 @@
 (print (+ "Median Age: "
           (str (.median
                  #s((. pima-df loc) : "Age")))))
+
+(setv pima-age-class-df
+      (.count #s((.groupby pima-df ["Age" "Cassification"] :as-index True)
+                 "Pregnancies")))
+
+(.plot.bar pima-age-class-df)
+;; (.plot.bar
+;;   (.concat pd
+;;            [#s((. pima-age-class-df loc) (= (.get pima-age-class-df "Cassification") 0))
+;;             #s((. pima-age-class-df loc) (= (.get pima-age-class-df "Cassification") 1))]
+;;            :axis 1))
+(.show plt)
+
+(setv bins [0 6 12 18 24 30 36 42 48 54 60 66 72 78 84])
+(setv labels ["0-6" "7-12" "13-18" "19-24" "25-30" "31-36" "37-42" "43-48" "49-54" "55-60" "61-66" "67-72" "73-78" "79-84"])
+(setv #s((. pima-df loc) : "age-binned-half-std")
+      (.cut pd (.get pima-df "Age") bins :labels labels))
+(setv pima-age-groupings-df
+      (.count #s((.groupby pima-df ["age-binned-half-std"] :as-index False) "Age")))
+(print pima-age-groupings-df)
+(.plot pima-age-groupings-df :kind "bar")
+(.show plt)
+
+(setv bins [0 12 24 36 48 60 72 84])
+(setv labels ["0-12" "13-24" "25-36" "37-48" "49-60" "61-72" "73-84"])
+(setv #s((. pima-df loc) : "age-binned-one-std")
+      (.cut pd (.get pima-df "Age") bins :labels labels))
+(setv pima-age-groupings-df
+      (.count #s((.groupby pima-df ["age-binned-one-std"] :as-index False) "Age")))
+(.plot pima-age-groupings-df :kind "bar")
+(.show plt)
+
+(setv bins [0 12 18 24 30 42 54 66 84])
+(setv labels ["0-12" "13-18" "19-24" "24-30" "31-42" "43-54" "55-66" "67-84"])
+(setv #s((. pima-df loc) : "age-binned-hybrid-std")
+      (.cut pd (.get pima-df "Age") bins :labels labels))
+(setv pima-age-groupings-df
+      (.count #s((.groupby pima-df ["age-binned-hybrid-std"] :as-index False) "Age")))
+(.plot pima-age-groupings-df :kind "bar")
+(.show plt)
 ;; (print (.median
 ;;          #s((. pima-df loc) : "Age")))
 ;; If using median to replace 0's which represent NULLs, you want to use the
