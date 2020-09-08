@@ -207,9 +207,21 @@
           (str (.median
                  #s((. pima-df loc) : "Age")))))
 
+(.agg (.groupby pima-age-class-df "Age")
+      :AgeDiabeticRatio (, "Pregnancies"
+                           (fn [xs]
+                             (/ (get (list xs) 1)
+                                (+ (get (list xs) 0) (get (list xs) 1))))))
+
+(.agg (.groupby pima-age-class-df "Age")
+      :AgeDiabeticRatio (, "Pregnancies"
+                           (fn [xs] (print (get (list xs) 0)))))
+
 (setv pima-age-class-df
-      (.count #s((.groupby pima-df ["Age" "Cassification"] :as-index True)
+      (.count #s((.groupby pima-df ["Age" "Cassification"] :as-index False)
                  "Pregnancies")))
+(setv pima-age-diabetic-ratio-df
+      (.))
 
 (.plot.bar pima-age-class-df)
 ;; (.plot.bar
