@@ -11,7 +11,15 @@
       (pd.read_csv
         "http://nrvis.com/data/mldata/pima-indians-diabetes.csv"
         :header None
-        :names ["Pregnancies" "Glucose" "DiastolicBloodPressure" "SkinThickness" "Insulin" "BMI" "DiabetesPedigreeFunction" "Age" "Cassification"]))
+        :names ["Pregnancies"
+                "Glucose"
+                "DiastolicBloodPressure"
+                "SkinThickness"
+                "Insulin"
+                "BMI"
+                "DiabetesPedigreeFunction"
+                "Age"
+                "Classification"]))
 
 (print "Here is what the raw data looks like...")
 (print pima-df)
@@ -217,8 +225,28 @@
 ;;       :AgeDiabeticRatio (, "Pregnancies"
 ;;                            (fn [xs] (print (get (list xs) 0)))))
 
+(setv dpf-bins [0.077 0.1635 0.25 0.31 0.38 0.45 0.67 2.6])
+(setv labels ["0.77-0.1635"
+              "0.1636-0.25"
+              "0.26-0.31"
+              "0.32-0.38"
+              "0.39-0.45"
+              "0.46-0.67" "> 0.67"])
+(setv #s((. pima-df loc) : "DPF-Binned")
+      (.cut pd
+            (.get pima-df "DiabetesPedigreeFunction")
+            dpf-bins
+            :labels labels))
+(setv pima-dpf-binned-df
+      (.count #s((.groupby pima-df
+                           ["DPF-Binned" "Classification"]
+                           :as-index False)
+                  "DiabetesPedigreeFunction")))
+(.plot pima-dpf-binned-df :kind "bar")
+(.show plt)
+
 (setv pima-age-class-df
-      (.count #s((.groupby pima-df ["Age" "Cassification"] :as-index False)
+      (.count #s((.groupby pima-df ["Age" "Classification"] :as-index False)
                  "Pregnancies")))
 ;; (setv pima-age-diabetic-ratio-df
 ;;       (.))
@@ -226,17 +254,31 @@
 (.plot.bar pima-age-class-df)
 ;; (.plot.bar
 ;;   (.concat pd
-;;            [#s((. pima-age-class-df loc) (= (.get pima-age-class-df "Cassification") 0))
-;;             #s((. pima-age-class-df loc) (= (.get pima-age-class-df "Cassification") 1))]
+;;            [#s((. pima-age-class-df loc) (= (.get pima-age-class-df "Classification") 0))
+;;             #s((. pima-age-class-df loc) (= (.get pima-age-class-df "Classification") 1))]
 ;;            :axis 1))
 (.show plt)
 
 (setv bins [0 6 12 18 24 30 36 42 48 54 60 66 72 78 84])
-(setv labels ["0-6" "7-12" "13-18" "19-24" "25-30" "31-36" "37-42" "43-48" "49-54" "55-60" "61-66" "67-72" "73-78" "79-84"])
+(setv labels ["0-6"
+              "7-12"
+              "13-18"
+              "19-24"
+              "25-30"
+              "31-36"
+              "37-42"
+              "43-48"
+              "49-54"
+              "55-60"
+              "61-66"
+              "67-72"
+              "73-78"
+              "79-84"])
 (setv #s((. pima-df loc) : "age-binned-half-std")
       (.cut pd (.get pima-df "Age") bins :labels labels))
 (setv pima-age-groupings-df
-      (.count #s((.groupby pima-df ["age-binned-half-std"] :as-index False) "Age")))
+      (.count #s((.groupby pima-df ["age-binned-half-std"] :as-index False)
+                  "Age")))
 (print pima-age-groupings-df)
 (.plot pima-age-groupings-df :kind "bar")
 (.show plt)
@@ -246,7 +288,8 @@
 (setv #s((. pima-df loc) : "age-binned-one-std")
       (.cut pd (.get pima-df "Age") bins :labels labels))
 (setv pima-age-groupings-df
-      (.count #s((.groupby pima-df ["age-binned-one-std"] :as-index False) "Age")))
+      (.count #s((.groupby pima-df ["age-binned-one-std"] :as-index False)
+                  "Age")))
 (.plot pima-age-groupings-df :kind "bar")
 (.show plt)
 
@@ -255,7 +298,8 @@
 (setv #s((. pima-df loc) : "age-binned-hybrid-std")
       (.cut pd (.get pima-df "Age") bins :labels labels))
 (setv pima-age-groupings-df
-      (.count #s((.groupby pima-df ["age-binned-hybrid-std"] :as-index False) "Age")))
+      (.count #s((.groupby pima-df ["age-binned-hybrid-std"] :as-index False)
+                  "Age")))
 (.plot pima-age-groupings-df :kind "bar")
 (.show plt)
 ;; (print (.median
@@ -271,8 +315,8 @@
 ;; some cases.
 
 ;; - Next week - actually write naiive bayes function.
-;; - Future, SGD for adjusting bin sizes?  Important to avoid overfitting, discuss
-;; strategies for that.
+;; - Future, SGD for adjusting bin sizes?  Important to avoid overfitting,
+;; discuss strategies for that.
 
 
 ;; Histograms

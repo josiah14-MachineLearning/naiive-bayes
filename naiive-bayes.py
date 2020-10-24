@@ -236,9 +236,11 @@ labels = ["0-12", "13-24", "25-36", "37-48", "49-60", "61-72", "73-84"]
 pima_df.loc[slice(None, None), "age-binned-one-std"] = pd.cut(
     pima_df.get("Age"), bins, labels=labels
 )
+
 pima_age_groupings_df = pima_df.groupby(["age-binned-one-std"], as_index=False)[
     "Age",
 ].count()
+
 pima_age_groupings_df.plot(kind="bar")
 plt.show()
 bins = [0, 12, 18, 24, 30, 42, 54, 66, 84]

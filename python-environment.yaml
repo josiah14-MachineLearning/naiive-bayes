@@ -1,0 +1,24 @@
+name: naiive-bayes
+channels:
+  - default
+  - conda-forge
+  - anaconda
+dependencies:
+  - python=3.7.9
+  - cython
+  - pip
+  - pandas>=1.1.2,<1.2.0
+  - matplotlib>=3.3.0,<3.4.0
+  - seaborn>=0.10.1,<0.11.0
+  - mamba
+  - expects
+  - hypothesis
+  - jupyter
+  - jupyter_console
+  - jupyterthemes
+  - mypy
+  - pylint
+  - flake8
+  - black
+  - pip:
+    - cPyparsing>=2.4.0

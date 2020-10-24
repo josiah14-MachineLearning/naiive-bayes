@@ -104,3 +104,17 @@ have greater benefits depending on the circumstances.
 Learning about ML algos for making predictions/classifications.  You can toy with
 different ML algos and approaches as much as you want, but what will have the largest
 effect is finding more data that can paint a more complete picture of the story.
+
+# Problem Solving for looking into the data
+
+## Binning Age
+
+- Creating bins of different sizes looks like manipulating the data.
+- I thought it would make more sense to bin according to where drastic changes in the classificaiton of diabetes vs not diabetes occur.
+- My approach can makes sense, is not a bad idea, but I'd want to smoothe the data first before doing something like that.
+- One smoothing technique is to take a weighted average of the neighboring ages and combining it into the current age
+- Simplest smoothing technique would be a moving average of 3 ages or so (think of moving average as a "moving" bin aggregation using avg).
+
+# General Advice
+
+- Google quick plots in Pandas
